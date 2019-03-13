@@ -136,27 +136,14 @@ void HQP::robot::RobotModel::setRobot() {
 	axis_[5] = -1.0*Eigen::Vector3d::UnitY();
 	axis_[6] = -1.0*Eigen::Vector3d::UnitZ();
 
-	// joint_position_global_[0] = Eigen::Vector3d(0.0, 0.0, 0.3330);
-	// joint_position_global_[1] = Eigen::Vector3d(0.0, 0.0, 0.3330);
-	// joint_position_global_[2] = Eigen::Vector3d(0.0, 0.0, 0.6490);
-	// joint_position_global_[3] = Eigen::Vector3d(0.0825, 0.0, 0.6490);
-	// joint_position_global_[4] = Eigen::Vector3d(0.0, 0.0, 1.0330);
-	// joint_position_global_[5] = Eigen::Vector3d(0.0, 0.0, 1.0330);
-	// joint_position_global_[6] = Eigen::Vector3d(0.0880, 0.0, 1.0330);
-	Vector3d base_pos;
-	//base_pos(0) = -0.35;
-	base_pos(0) = 0.0;
-	base_pos(1) = 0.2;
-	base_pos(2) = 0.0;
-	base_pos.setZero();
 
-	joint_position_global_[0] = Eigen::Vector3d(0.3501, 0.0, 0.7081) + base_pos;
-	joint_position_global_[1] = Eigen::Vector3d(0.3501, 0.0, 0.7081) + base_pos;
-	joint_position_global_[2] = Eigen::Vector3d(0.3501, 0.0, 1.0241) + base_pos;
-	joint_position_global_[3] = Eigen::Vector3d(0.4326, 0.0, 1.0240) + base_pos;
-	joint_position_global_[4] = Eigen::Vector3d(0.3501, 0.0, 1.4080) + base_pos;
-	joint_position_global_[5] = Eigen::Vector3d(0.3501, 0.0, 1.4080) + base_pos;
-	joint_position_global_[6] = Eigen::Vector3d(0.4381, 0.0, 1.4080) + base_pos;
+	joint_position_global_[0] = Eigen::Vector3d(0.3501, 0.0, 0.7081) ;
+	joint_position_global_[1] = Eigen::Vector3d(0.3501, 0.0, 0.7081) ;
+	joint_position_global_[2] = Eigen::Vector3d(0.3501, 0.0, 1.0241) ;
+	joint_position_global_[3] = Eigen::Vector3d(0.4326, 0.0, 1.0240) ;
+	joint_position_global_[4] = Eigen::Vector3d(0.3501, 0.0, 1.4080) ;
+	joint_position_global_[5] = Eigen::Vector3d(0.3501, 0.0, 1.4080) ;
+	joint_position_global_[6] = Eigen::Vector3d(0.4381, 0.0, 1.4080) ;
 
 
 	joint_position_local_[0] = joint_position_global_[0];
@@ -164,13 +151,13 @@ void HQP::robot::RobotModel::setRobot() {
 	for (int i = 1; i < dof; i++)
 		joint_position_local_[i] = joint_position_global_[i] - joint_position_global_[i - 1];
 
-	com_position_[0] = Vector3d(0.3502, -0.0345, 0.6326) + base_pos;
-	com_position_[1] = Vector3d(0.3503, 0.0345, 0.7844) + base_pos;
-	com_position_[2] = Vector3d(0.3835, 0.0267, 0.9827) + base_pos;
-	com_position_[3] = Vector3d(0.3832, -0.0265, 1.0665) + base_pos;
-	com_position_[4] = Vector3d(0.3514, 0.0424, 1.2993) + base_pos;
-	com_position_[5] = Vector3d(0.3922, -0.0102, 1.4232) + base_pos;
-	com_position_[6] = Vector3d(0.4501, -0.0119, 1.3286) + base_pos;
+	com_position_[0] = Vector3d(0.3502, -0.0345, 0.6326) ;
+	com_position_[1] = Vector3d(0.3503, 0.0345, 0.7844) ;
+	com_position_[2] = Vector3d(0.3835, 0.0267, 0.9827) ;
+	com_position_[3] = Vector3d(0.3832, -0.0265, 1.0665) ;
+	com_position_[4] = Vector3d(0.3514, 0.0424, 1.2993) ;
+	com_position_[5] = Vector3d(0.3922, -0.0102, 1.4232) ;
+	com_position_[6] = Vector3d(0.4501, -0.0119, 1.3286) ;
 
 	for (int i = 0; i < dof; i++)
 		com_position_[i] -= joint_position_global_[i];
@@ -341,9 +328,6 @@ void HQP::robot::RobotModel::getUpdateKinematics(const VectorXd & q, const Vecto
 	// for mobile
 	m_base_.setIdentity();
 	m_base_.rotate(AngleAxisd(q(2), Vector3d::UnitZ()));
-	//m_base_.linear() = rot;
-	//m_base_.translation()(0) = m_mob_pos(0);
-	//m_base_.translation()(1) = m_mob_pos(1);
 	m_base_.translation().head(2) = q_rbdl_.head(2);
 
 

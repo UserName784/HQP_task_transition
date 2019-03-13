@@ -48,16 +48,10 @@ void VRepBridge::dataInit()
 	current_qdot_.setZero();
 	desired_q_.resize(MOTORNUM);
 	desired_q_.setZero();
-	target_x_.resize(3);
-	target_x_.setZero();
 	desired_torque_.resize(MOTORNUM);
 	desired_torque_.setZero();
 	current_base_vel_.resize(4);
 	desired_base_vel_.resize(4);
-
-	force_.setZero();
-	desired_obs_pos.setZero();
-	target_pos.setZero();
 
 	_cntt = 0;
 
@@ -97,18 +91,6 @@ void VRepBridge::write()
 	for (size_t i = 0; i < 4; i++)
 		simxSetJointTargetVelocity(clientID_, baseHandle_[i], desired_base_vel_(i), simx_opmode_streaming);
 
-
-	//simxSetObjectPosition(clientID_, obstacle_, -1, obs1_, simx_opmode_streaming);
-	//simxSetObjectPosition(clientID_, obstacle_2, -1, obs2_, simx_opmode_streaming);
-
-	//if (cnt % 50 == 0) {
-	//	//	simxSetObjectPosition(clientID_, distHandle[0], -1, dist1_ ,simx_opmode_streaming);
-	//	//	simxSetObjectPosition(clientID_, distHandle[1], -1, dist2_ ,simx_opmode_streaming);
-	//	simxSetObjectPosition(clientID_, distHandle[2], -1, dist3_, simx_opmode_streaming);
-	//	simxSetObjectPosition(clientID_, distHandle[3], -1, dist4_, simx_opmode_streaming);
-	//	//	simxSetObjectPosition(clientID_, distHandle[4], -1, dist5_ ,simx_opmode_streaming);
-	//	simxSetObjectPosition(clientID_, distHandle[5], -1, dist6_, simx_opmode_streaming);
-	//}
 	cnt++;
 
 }
@@ -184,19 +166,6 @@ void VRepBridge::getHandle()
 	simxErrorCheck(simxGetObjectHandle(clientID_, "panda_joint5", &motorHandle_[4], simx_opmode_oneshot_wait));
 	simxErrorCheck(simxGetObjectHandle(clientID_, "panda_joint6", &motorHandle_[5], simx_opmode_oneshot_wait));
 	simxErrorCheck(simxGetObjectHandle(clientID_, "panda_joint7", &motorHandle_[6], simx_opmode_oneshot_wait)); // Left Arm
-
-
-	simxErrorCheck(simxGetObjectHandle(clientID_, "Sphere", &obstacle_, simx_opmode_oneshot_wait));
-	simxErrorCheck(simxGetObjectHandle(clientID_, "Sphere6", &obstacle_2, simx_opmode_oneshot_wait));
-
-	simxErrorCheck(simxGetObjectHandle(clientID_, "Sphere0", &distHandle[0], simx_opmode_oneshot_wait));
-	simxErrorCheck(simxGetObjectHandle(clientID_, "Sphere1", &distHandle[1], simx_opmode_oneshot_wait));
-	simxErrorCheck(simxGetObjectHandle(clientID_, "Sphere2", &distHandle[2], simx_opmode_oneshot_wait));
-	simxErrorCheck(simxGetObjectHandle(clientID_, "Sphere3", &distHandle[3], simx_opmode_oneshot_wait));
-	simxErrorCheck(simxGetObjectHandle(clientID_, "Sphere4", &distHandle[4], simx_opmode_oneshot_wait));
-	simxErrorCheck(simxGetObjectHandle(clientID_, "Sphere5", &distHandle[5], simx_opmode_oneshot_wait));
-
-
 
 	simxErrorCheck(simxGetObjectHandle(clientID_, "joint_1", &baseHandle_[0], simx_opmode_oneshot_wait));
 	simxErrorCheck(simxGetObjectHandle(clientID_, "joint_2", &baseHandle_[1], simx_opmode_oneshot_wait));

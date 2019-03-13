@@ -50,26 +50,12 @@ public:
 
 public:
 	int cnt = 0;
-	simxFloat dist1_[3];
-
-	simxFloat obs1_[3];
-	simxFloat obs2_[3];
-
-	simxFloat dist2_[3];
-	simxFloat dist3_[3];
-	simxFloat dist4_[3];
-	simxFloat dist5_[3];
-	simxFloat dist6_[3];
+	
 	Eigen::VectorXd current_q_;
 	Eigen::VectorXd current_qdot_;
 	Eigen::VectorXd desired_q_;
 	Eigen::VectorXd desired_torque_;
-	Eigen::VectorXd target_x_;
 
-	Eigen::Vector3d force_;
-	Eigen::Vector3d torque_;
-	Eigen::Vector3d desired_obs_pos;
-	Eigen::Vector3d target_pos;
 	Eigen::Vector3d euler_;
 	Eigen::Vector3d euler2_;
 	Eigen::Vector3d center_pos;
@@ -99,19 +85,9 @@ private:
 	simxInt clientID_shared;
 	simxInt motorHandle_[MOTORNUM];	/// < Depends on simulation envrionment
 	simxInt baseHandle_[4];
-	simxInt objectHandle_;
 	simxInt StateEstimator_;
-	simxInt Obstacle;
-	simxInt Target;
-	simxInt Collection_;
 	simxInt maniCenter_;
-	simxInt obstacle_;
-	simxInt obstacle_2;
 
-
-	simxInt distHandle[6];
-
-	simxInt targetHandle_;
 
 	size_t tick_;
 	//callfunc loopCallbackFunc;

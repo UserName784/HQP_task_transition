@@ -189,7 +189,6 @@ namespace HQP
 				m_a_des = -m_Kp.cwiseProduct(m_p_error)
 					- m_Kd.cwiseProduct(m_v_error);
 
-				//cout << m_activeAxes.size() << endl;
 				if (!transition_flag)
 				{
 					for (unsigned int i = 0; i < m_activeAxes.size(); i++) {

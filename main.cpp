@@ -9,7 +9,6 @@
 //for controller 
 #include "Inverse-dynamics.h"
 
-
 // for tasks
 #include "task-com.h"
 #include "task-operational.h"
@@ -25,21 +24,18 @@
 // for solver
 #include "solver-HQP-factory.hxx"
 #include "solver-utils.h"
-//#include <tsid/math/utils.hpp>
 
 // for contact point
 #include "contact-3d.h"
 
 // for util
 #include "utils.h"
-
 #include "container.h"
 #include <string>
 #include <vector>
 #include <conio.h> // for keyboard hit
 #include <fstream>
 FILE *joint = fopen("joint_pos.txt", "w");
-
 FILE *task_error_j = fopen("task_joint_error.txt", "w");
 FILE *task_error_ee = fopen("task_ee_error.txt", "w");
 FILE *task_error_m = fopen("task_mobile_error.txt", "w");
@@ -75,7 +71,7 @@ using namespace std;
 
 
 HQP::robot::RobotModel * robot_;
-HQP::InverseDynamics * invdyn_, *invdyn_2, *invdyn_3, *invdyn_total_, *invdyn2_, *invdyn3_, *invdyn_total2_, *invdyn4_;
+HQP::InverseDynamics * invdyn_, *invdyn_total_, *invdyn2_;
 HQP::tasks::TaskJointPosture * jointTask, *jointTask2;
 HQP::tasks::TaskOperationalSpace * moveTask, *move2Task;
 HQP::tasks::TaskJointLimit * jointLimitTask;
@@ -126,7 +122,6 @@ using namespace HQP;
 int main()
 {
 
-	ifstream in("iros_joint_acc_case1_0214.txt");
 	// for robot
 	robot_ = new HQP::robot::RobotModel(1);
 	na = robot_->na();
@@ -202,7 +197,6 @@ int main()
 	VectorXd q_init(dof);
 	bool flag = false;
 	VectorXd tau(dof);
-	// for logging
 
 	while (vb.simConnectionCheck() && !vb.exitFlag)
 	{
@@ -354,6 +348,8 @@ int main()
 				sampleJoint2 = trajPosture2->computeNext();
 				jointTask2->setReference(sampleJoint2);
 				double current_time = vrep_time - start_time;
+
+
 				// first the order of SOT is Task2 < Task1< Task3 
 				// then Task2 < Task3 < Task1
 				// then Task1 < Task3 < Task2
@@ -419,10 +415,10 @@ int main()
 					mobileTask->setBeta(beta1); 
 					jointTask2->setBeta(beta2); 
 
-					const solver::HQPData & HQPData1 = invdyn_->computeProblemData(vrep_time, q_current, qdot_current);
-					const solver::HQPData & HQPData2 = invdyn2_->computeProblemData(vrep_time, q_current, qdot_current);
-					sol_1 = solver->solve(HQPData1);
-					sol_2 = solver_2->solve(HQPData2);
+					HQP_data1 = invdyn_->computeProblemData(vrep_time, q_current, qdot_current);
+					HQP_data2 = invdyn2_->computeProblemData(vrep_time, q_current, qdot_current);
+					sol_1 = solver->solve(HQP_data1);
+					sol_2 = solver_2->solve(HQP_data2);
 
 					mobileTask->setTransition(true); 
 					jointTask2->setTransition(true); 
@@ -482,9 +478,6 @@ int main()
 				
 					if (vb._cntt % 200 == 0) {
 						cout << solver::HQPDataToString(HQP_data3, true) << endl;
-						//cout << sol_2.x.head(9).transpose()<<endl;
-						// 
-						//getchar();ftra
 					}
 					tau = invdyn_total_->getActuatorForces(sol_total_);
 					dv = invdyn_total_->getAccelerations(sol_total_);
@@ -500,13 +493,7 @@ int main()
 				 wheel_r_prev = wheel_r;
 				 wheel_l_prev = wheel_l;
 
-				 for (int i = 0;i < 2;i++) {
-					 if (dv(i) > 0.5)
-						 dv(i) = 0.5;
-				 }
-				// cout << robot_->getNLEtorque().tail(7).transpose() << endl;
-
-				 vb.desired_torque_ =tau;// tau;
+				 vb.desired_torque_ = tau;// tau;
 				vb.desired_base_vel_(0) = dv(0); // dv(0)
 				vb.desired_base_vel_(1) = dv(1); // dv(1)
 				vb.desired_base_vel_(2) = dv(1); // dv(1)

@@ -168,27 +168,13 @@ namespace HQP
 				- m_Kd.cwiseProduct(m_v_error.vector());
 			//+ m_a_ref.actInv(m_wMl).vector();
 
-
-
 			m_J = m_robot.getJacobian(7); //check world jacobian
 			m_J.block(0, 2, 6, m_robot.nv() - 2).setZero();
-			//		m_J.block(0,0,2,2) = m_robot.getSelectionMatrix().block(0,0,2,2);
 
 			// for (int i = 0; i < m_J.cols(); i++) {
 			// 	m_J.middleCols(i, 1) = actinv(oMi, m_J.middleCols(i, 1)).vector();
 			// } // world jacobian to local jacobian
 
-			Matrix3d EE_ori = oMi.linear();
-			Matrix3d EE_ref = m_M_ref.linear();
-
-			Vector3d delphi = GetPhi(EE_ori, EE_ref);
-
-			m_a_des.head(3) = 10.0 * (m_M_ref.translation() - oMi.translation()) - 1.0 * sqrt(5.0) * v_frame.linear();
-			//		m_a_des.tail(4).setZero();
-			m_a_des.tail(3) = -10.0*delphi;
-			// Fix me !!!!!!!
-			//	cout <<"desired" << m_M_ref.translation().transpose()<<endl;
-			//	cout <<"current "<<  oMi.translation().transpose()<<endl;
 
 			if (m_ori_ctrl) { // if you want to control mobile orientation only
 				Vector3d b = m_a_des.tail(3);

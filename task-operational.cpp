@@ -159,23 +159,10 @@ namespace HQP
 			//+ m_a_ref.actInv(m_wMl).vector();
 
 			m_J = m_robot.getJacobian(m_frame_id);
-			// m_J.block(5,0,1,2).setZero();
+
 			//   for (int i = 0; i < m_J.cols(); i++) {
 			//   m_J.middleCols(i, 1) = actinv(oMi, m_J.middleCols(i, 1)).vector();
 			//  } // world jacobian to local jacobian
-			//m_J.block(0, 0, 3, 9).setZero();
-
-			Matrix3d EE_ori = oMi.linear();
-			Matrix3d EE_ref = m_M_ref.linear();
-
-			Vector3d delphi = GetPhi(EE_ori, EE_ref);
-
-			m_a_des.head(3) = 400.0 * (m_M_ref.translation() - oMi.translation()) - 1.0 * sqrt(400.0) * v_frame.linear();
-			m_a_des.tail(3) =  -20.0*delphi;
-
-			// m_J.block(0,0,6,2).setZero();
-			// m_a_des.head(3).setZero();
-			//cout << (m_beta * m_a_des).transpose() << endl;
 
 			m_constraint.setMatrix(m_J);
 			if (!transition_flag)
@@ -183,12 +170,6 @@ namespace HQP
 			else
 				m_constraint.setVector(m_beta * m_a_des + (1.0 - m_beta) * m_J * m_old_sol);
 			return m_constraint;
-
-			// m_constraint.setMatrix(m_J);
-			// m_constraint.setVector(m_a_des);
-			// return m_constraint;
-
-
 
 			// Eigen::FullPivHouseholderQR<MatrixXd> qr(m_J);
 			// MatrixXd U, Z, T;
