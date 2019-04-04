@@ -4,7 +4,7 @@ This is the continuous task transition algorithm based on Hierarchical Qudratic 
 
 The algorithm can deal with insertion, removal, and swapping of multiple prioritized tasks.
 
-This code can provide various applications of the algorithm, such as joint limit avoidance, singularity avoidance, and obstacle-collision avoidance. 
+This code can provide various applications of the algorithm, such as joint limit avoidance, singularity avoidance, and obstacle  avoidance. 
 
 The experimental video clips are avaliable in the following website: http://dyros.snu.ac.kr/HQPtasks
 
